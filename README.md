@@ -14,7 +14,6 @@ A series of tools created to conduct research on executables and processes.
 
 #### Needs clarification:
 - Determine what folders need to be checked on Windows systems
-- Check if only the average of .text sections are needed, not all sections
 - Determine if we need to split the listings of executables (and their sizes) from the section analysis
 
 #### Future features:
