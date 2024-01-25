@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os
-from isElf import is_elf_file
+from isElf import isElfFile
 from fileSize import getSize
 
 countElf = 0
@@ -10,9 +10,9 @@ for subdir, dirs, files in os.walk("/"):
         for file in files:
             filepath = os.path.join(subdir, file)
             if os.path.islink(filepath) == False:
-                if is_elf_file(filepath):
+                if isElfFile(filepath):
                     countSize += getSize(filepath)
                     countElf += 1
 
-print(f'Total elf files: {countElf}')
-print(f'Total elf file size: {countSize}')
+print(f"Total elf files: {countElf}")
+print(f"Total elf file size: {countSize}")

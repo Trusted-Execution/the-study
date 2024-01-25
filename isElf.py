@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-def is_elf_file(file_path):
+def isElfFile(file_path):
     try:
         with open(file_path, 'rb') as file:
             elf_signature = file.read(4)
