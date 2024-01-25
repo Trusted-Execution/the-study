@@ -3,7 +3,7 @@ import os
 import struct
 from isElf import isElfFile
 from fileSize import getSize
-from sectionSize import sectionSizes
+from elfSectionSize import sectionSizes
 
 countElf = 0
 countElfSize = 0
@@ -34,4 +34,4 @@ for section_name, total_size in totalSectionSizes.items():
     print("{:<20} {:<20}".format(section_name, round(average_size, 2)))
 
 print(f"Total elf files: {countElf}")
-print(f"Total elf file size: {countElfSize}")
+print(f"Total elf file size: {countElfSize} bytes")
