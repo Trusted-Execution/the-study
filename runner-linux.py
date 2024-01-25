@@ -32,6 +32,5 @@ for section_name, total_size in totalSectionSizes.items():
     average_size = total_size / countElf
     print("{:<25} {:<20}".format(section_name, round(average_size, 2)))
 
-print("\n")
-print(f"Total elf files: {countElf}")
-print(f"Total elf file size: {countElfSize} bytes\n")
+print(f"\nTotal ELF files: {countElf}")
+print(f"Total ELF file size: {countElfSize} bytes\n")
