@@ -3,7 +3,7 @@ import pefile
 
 def mzSectionSizes(file_path):
     # Parse file with pefile library
-    pe = pefile.PE(file_path)
+    pe = pefile.PE(file_path, fast_load=True)
     print("{:<10}{:<10}{:<10}".format("Section", "Virtual", "Raw"))
     print("-" * 30)
     for section in pe.sections:

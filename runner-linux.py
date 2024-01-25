@@ -18,6 +18,7 @@ for subdir, dirs, files in os.walk("/usr/bin"):
                     countElfSize += getSize(file_path)
                     countElf += 1
                     tempSectionSizes = sectionSizes(file_path)
+                    print("-" * 50)
 
                     for section_name, size in tempSectionSizes.items():
                         if section_name in totalSectionSizes:
@@ -25,13 +26,12 @@ for subdir, dirs, files in os.walk("/usr/bin"):
                         else:
                             totalSectionSizes[section_name] = size
 # Print as table
-print()
-print("--------------------------------------------------")
 print("\nAverage Section Sizes across ELF Files:\n")
-print("{:<20} {:<20}".format("Section Name", "Average Size (bytes)"))
+print("{:<25} {:<20}".format("Section Name", "Average Size (bytes)"))
 for section_name, total_size in totalSectionSizes.items():
     average_size = total_size / countElf
-    print("{:<20} {:<20}".format(section_name, round(average_size, 2)))
+    print("{:<25} {:<20}".format(section_name, round(average_size, 2)))
 
+print("\n")
 print(f"Total elf files: {countElf}")
-print(f"Total elf file size: {countElfSize} bytes")
+print(f"Total elf file size: {countElfSize} bytes\n")
