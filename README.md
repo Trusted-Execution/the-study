@@ -1,7 +1,7 @@
 # the-study
 A series of tools created to conduct research on executables and processes.
 
-### Current features:
+#### Current features:
 - Identifies all 7FELF executables (runner-linux.py) or MZ executables (runner-windows.py) on a system
   - Excludes any symbolic links
   - Runs by default on a smaller test directory for faster testing, but can easily be changed to traverse
@@ -12,11 +12,12 @@ A series of tools created to conduct research on executables and processes.
   - Average section sizes based on all executables found
   - Total executables found and their combined size
 
-### Needs clarification:
+#### Needs clarification:
 - Determine what folders need to be checked on Windows systems
 - Check if only the average of .text sections are needed, not all sections
+- Determine if we need to split the listings of executables (and their sizes) from the section analysis
 
-### Future features:
+#### Future features:
 - Find all running processes on a system and count the number of libraries to make each process work
 - Find and count exported symbols for every executable on a system
 
