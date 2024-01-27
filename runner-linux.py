@@ -4,10 +4,11 @@ import struct
 from isElf import isElfFile
 from fileSize import getSize
 from elfSectionSize import sectionSizes
+import statistics
 
 countElf = 0
 countElfSize = 0
-totalSectionSizes = {}
+sectionSizeData = {}
 
 for subdir, dirs, files in os.walk("/usr/bin"):
    # if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):
@@ -21,16 +22,24 @@ for subdir, dirs, files in os.walk("/usr/bin"):
                     print("-" * 50)
 
                     for section_name, size in tempSectionSizes.items():
-                        if section_name in totalSectionSizes:
-                            totalSectionSizes[section_name] += size
+                        if section_name in sectionSizeData:
+                            sectionSizeData[section_name].append(size)
                         else:
-                            totalSectionSizes[section_name] = size
+                            sectionSizeData[section_name] = [size]
+
 # Print as table
-print("\nAverage Section Sizes across ELF Files:\n")
-print("{:<25} {:<20}".format("Section Name", "Average Size (bytes)"))
-for section_name, total_size in totalSectionSizes.items():
-    average_size = total_size / countElf
-    print("{:<25} {:<20}".format(section_name, round(average_size, 2)))
+print("\nAverage, Maximum, Minimum, and Standard Deviation of Section Sizes across ELF Files:\n")
+print("{:<25} {:<20} {:<20} {:<20} {:<20}".format("Section Name", "Average Size (bytes)", "Maximum Size", "Minimum Size", "Standard Deviation"))
+for section_name, sizes in sectionSizeData.items():
+    average_size = sum(sizes) / len(sizes)
+    max_size = max(sizes)
+    min_size = min(sizes)
+    if len(sizes) >= 2:
+        std = statistics.stdev(sizes)
+    else:
+        std = 0.0
+
+    print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(section_name, round(average_size, 2), max_size, min_size, round(std, 2)))
 
 print(f"\nTotal ELF files: {countElf}")
 print(f"Total ELF file size: {countElfSize} bytes\n")
