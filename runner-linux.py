@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import struct
+import time
 from isElf import isElfFile
 from fileSize import getSize
 from elfSectionSize import sectionSizes
@@ -9,6 +10,7 @@ import statistics
 countElf = 0
 countElfSize = 0
 sectionSizeData = {}
+start_time = time.time()
 
 for subdir, dirs, files in os.walk("/usr/bin"):
    # if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):
@@ -41,5 +43,8 @@ for section_name, sizes in sectionSizeData.items():
 
     print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(section_name, round(average_size, 2), max_size, min_size, round(std, 2)))
 
+end_time = time.time()
+elapsed_time = end_time - start_time
 print(f"\nTotal ELF files: {countElf}")
 print(f"Total ELF file size: {countElfSize} bytes\n")
+print(f"Total runtime: {elapsed_time:.2f} seconds\n")

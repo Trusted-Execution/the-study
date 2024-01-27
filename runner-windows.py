@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import os
+import time
 from isMZ import isMzFile
 from fileSize import getSize
 from mzSectionSize import mzSectionSizes
@@ -8,6 +9,7 @@ import statistics
 countMz = 0
 countMzSize = 0
 sectionSizeData = {}
+start_time = time.time()
 
 for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to your own local test directory
     for file in files:
@@ -39,5 +41,8 @@ for name, sizes in sectionSizeData.items():
         std = 0.0
     print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(name, round(average, 2), max_size, min_size, round(std, 2)))
 
+end_time = time.time()
+elapsed_time = end_time - start_time
 print(f"\nTotal MZ files: {countMz}")
 print(f"Total MZ file size: {countMzSize} bytes\n")
+print(f"Total runtime: {elapsed_time:.2f} seconds\n")
