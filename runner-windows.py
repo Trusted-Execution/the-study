@@ -3,12 +3,13 @@ import os
 from isMZ import isMzFile
 from fileSize import getSize
 from mzSectionSize import mzSectionSizes
+import statistics
 
 countMz = 0
 countMzSize = 0
-totalSizes = {}
+sectionSizeData = {}
 
-for subdir, dirs, files in os.walk(r"C:\Users\nakam\Downloads"):   # Change to your own local test directory
+for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to your own local test directory
     for file in files:
         filepath = os.path.join(subdir, file)
         if os.path.islink(filepath) == False:
@@ -21,16 +22,22 @@ for subdir, dirs, files in os.walk(r"C:\Users\nakam\Downloads"):   # Change to y
 
                 # Sum the sizes of each section
                 for name, size in sectionSizes.items():
-                    if name in totalSizes:
-                        totalSizes[name] += size
+                    if name in sectionSizeData:
+                        sectionSizeData[name].append(size)
                     else:
-                        totalSizes[name] = size
+                        sectionSizeData[name] = [size]
 
-print("\nAverage Section Sizes (based on raw size) across MZ Files:\n")
-print("{:<25} {:<20}".format("Section Name", "Average Size (bytes)"))
-for name, size in totalSizes.items():
-    average = size / countMz
-    print("{:<25} {:<20}".format(name, round(average, 2)))
+print("\nAverage, Maximum, Minimum, and Standard Deviation Section Sizes (based on raw size) across MZ Files:\n")
+print("{:<25} {:<20} {:<20} {:<20} {:<20}".format("Section Name", "Average Size (bytes)", "Maximum Size", "Minimum Size", "Standard Deviation"))
+for name, sizes in sectionSizeData.items():
+    average = sum(sizes) / len(sizes)
+    max_size = max(sizes)
+    min_size = min(sizes)
+    if len(sizes) >= 2:
+        std = statistics.stdev(sizes)
+    else:
+        std = 0.0
+    print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(name, round(average, 2), max_size, min_size, round(std, 2)))
 
 print(f"\nTotal MZ files: {countMz}")
 print(f"Total MZ file size: {countMzSize} bytes\n")
