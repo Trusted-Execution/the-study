@@ -31,8 +31,6 @@ for subdir, dirs, files in os.walk("/"):
                             sectionSizeData[section_name] = [size]
 
 # Print as table
-print("\nELF File Section Analysis:\n")
-print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
 for section_name, sizes in sectionSizeData.items():
     count = len(sizes)
     average_size = sum(sizes) / len(sizes)
@@ -43,7 +41,18 @@ for section_name, sizes in sectionSizeData.items():
     else:
         std = 0.0
 
-    print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format(section_name, round(average_size, 2), max_size, min_size, round(std, 2), count))
+# Create Pandas dataframe
+df = pd.DataFrame(list(sectionSizeData.items()), columns=['Section', 'Size'])
+
+# Perform calculations
+df['Avg'] = df['Size'].apply(lambda sizes: sum(sizes) / len(sizes))
+df['Max'] = df['Size'].apply(max)
+df['Min'] = df['Size'].apply(min)
+df['Std'] = df['Size'].apply(lambda sizes: statistics.stdev(sizes) if len(sizes) >= 2 else 0.0)
+
+# Save to CSV / Excel
+df.to_csv('results.csv')
+#df.to_excel('results.xlsx')
 
 end_time = time.time()
 elapsed_time = end_time - start_time

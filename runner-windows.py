@@ -29,9 +29,10 @@ for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to y
                     else:
                         sectionSizeData[name] = [size]
 
-print("\nAverage, Maximum, Minimum, and Standard Deviation Section Sizes (based on raw size) across MZ Files:\n")
-print("{:<25} {:<20} {:<20} {:<20} {:<20}".format("Section Name", "Average Size (bytes)", "Maximum Size", "Minimum Size", "Standard Deviation"))
+print("\nMZ File Section Analysis:\n")
+print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
 for name, sizes in sectionSizeData.items():
+    count = len(sizes)
     average = sum(sizes) / len(sizes)
     max_size = max(sizes)
     min_size = min(sizes)
@@ -39,7 +40,7 @@ for name, sizes in sectionSizeData.items():
         std = statistics.stdev(sizes)
     else:
         std = 0.0
-    print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(name, round(average, 2), max_size, min_size, round(std, 2)))
+    print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format(name, round(average, 2), max_size, min_size, round(std, 2), count))
 
 end_time = time.time()
 elapsed_time = end_time - start_time
