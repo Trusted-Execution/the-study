@@ -49,10 +49,13 @@ df['Avg'] = df['Size'].apply(lambda sizes: sum(sizes) / len(sizes))
 df['Max'] = df['Size'].apply(max)
 df['Min'] = df['Size'].apply(min)
 df['Std'] = df['Size'].apply(lambda sizes: statistics.stdev(sizes) if len(sizes) >= 2 else 0.0)
+df['Count'] = df['Size'].apply(len)
+
+df = df.drop('Size', axis=1)
 
 # Save to CSV / Excel
 df.to_csv('results.csv')
-#df.to_excel('results.xlsx')
+#df.to_excel('results.xlsx')( Currently broken)
 
 end_time = time.time()
 elapsed_time = end_time - start_time
