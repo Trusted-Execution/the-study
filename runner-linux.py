@@ -2,18 +2,19 @@
 import os
 import struct
 import time
+import statistics
+import pandas as pd
 from isElf import isElfFile
 from fileSize import getSize
 from elfSectionSize import sectionSizes
-import statistics
 
 countElf = 0
 countElfSize = 0
 sectionSizeData = {}
 start_time = time.time()
 
-for subdir, dirs, files in os.walk("/usr/bin"):
-   # if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):
+for subdir, dirs, files in os.walk("/"):
+    if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):
         for file in files:
             file_path = os.path.join(subdir, file)
             if os.path.islink(file_path) == False:
@@ -30,9 +31,10 @@ for subdir, dirs, files in os.walk("/usr/bin"):
                             sectionSizeData[section_name] = [size]
 
 # Print as table
-print("\nAverage, Maximum, Minimum, and Standard Deviation of Section Sizes across ELF Files:\n")
-print("{:<25} {:<20} {:<20} {:<20} {:<20}".format("Section Name", "Average Size (bytes)", "Maximum Size", "Minimum Size", "Standard Deviation"))
+print("\nELF File Section Analysis:\n")
+print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
 for section_name, sizes in sectionSizeData.items():
+    count = len(sizes)
     average_size = sum(sizes) / len(sizes)
     max_size = max(sizes)
     min_size = min(sizes)
@@ -41,7 +43,7 @@ for section_name, sizes in sectionSizeData.items():
     else:
         std = 0.0
 
-    print("{:<25} {:<20} {:<20} {:<20} {:<20}".format(section_name, round(average_size, 2), max_size, min_size, round(std, 2)))
+    print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format(section_name, round(average_size, 2), max_size, min_size, round(std, 2), count))
 
 end_time = time.time()
 elapsed_time = end_time - start_time
