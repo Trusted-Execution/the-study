@@ -9,12 +9,10 @@ A series of tools created to conduct research on executables and processes.
 - Both tools are capable of finding:
   - Overall size of each executable 
   - All sections within each executable and their individual sizes
-  - Average section sizes based on all executables found
+  - Average, minimum, maximum, and standard deviation of section sizes based on all executables found
   - Total executables found and their combined size
-
-#### Needs clarification:
-- Determine what folders need to be checked on Windows systems
-- Determine if we need to split the listings of executables (and their sizes) from the section analysis
+- Uses pandas Python library to generate a CSV file with section size data
+  - Excel file generation currently broken
 
 #### Future features:
 - Find all running processes on a system and count the number of libraries to make each process work
