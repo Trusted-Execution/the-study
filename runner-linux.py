@@ -10,6 +10,7 @@ from elfSectionSize import sectionSizes
 
 countElf = 0
 countElfSize = 0
+count100 = 0
 sectionSizeData = {}
 start_time = time.time()
 
@@ -21,9 +22,12 @@ for subdir, dirs, files in os.walk("/"):
                 if isElfFile(file_path):
                     countElfSize += getSize(file_path)
                     countElf += 1
+                    count100 += 1
                     tempSectionSizes = sectionSizes(file_path)
-                    print("-" * 50)
-
+                    #print("-" * 50)
+                    if (count100 == 100):
+                        print(".")
+                        count100 = 0
                     for section_name, size in tempSectionSizes.items():
                         if section_name in sectionSizeData:
                             sectionSizeData[section_name].append(size)
@@ -51,6 +55,10 @@ df['Min'] = df['Size'].apply(min)
 df['Std'] = df['Size'].apply(lambda sizes: statistics.stdev(sizes) if len(sizes) >= 2 else 0.0)
 df['Count'] = df['Size'].apply(len)
 
+# Sort list alphabetically based on section name
+df.sort_values('Section', inplace=True)
+
+# Remove column with all the section sizes
 df = df.drop('Size', axis=1)
 
 # Save to CSV / Excel

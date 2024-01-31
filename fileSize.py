@@ -12,5 +12,5 @@ def getSize(file_path):
     file_stats = os.stat(file_path)
     file_size = file_stats.st_size
     converted_size = convertBytes(file_size)
-    print(f"Size of file = {converted_size}")
+    #print(f"{converted_size}")
     return file_size

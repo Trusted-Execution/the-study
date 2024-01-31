@@ -15,7 +15,7 @@ def isElfFile(file_path):
             # Check if it has the magic
             if elf_signature == b'\x7fELF':
                 #name = truncate(file_path)
-                print(f"{file_path} is a 7fELF file")
+                #print(f"{file_path}: ", end=" ")
                 return True
     except Exception as e:
         print(f"Error checking file {file_path}: {e}")
