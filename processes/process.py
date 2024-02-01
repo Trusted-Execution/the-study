@@ -19,7 +19,7 @@ def print_process_tree(process, depth=0, depth_data=None, max_depths = None):
 
     if depth == 0 and depth_data:
         max_depths.append(max(depth_data))
-        print(f"\nDepth Statistic for Root Proccess PID = {process.pid}")
+        print(f"\nDepth Statistic for Root Process PID = {process.pid}")
         print(f"  Minimum Depth: {min(depth_data)}")
         print(f"  Maximum Depth: {max(depth_data)}")
         print(f"  Average Depth: {statistics.mean(depth_data)}")

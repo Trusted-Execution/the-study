@@ -25,7 +25,7 @@ proc_dir = "/proc"
 for pid in os.listdir(proc_dir):
     if pid.isdigit():
         maps_path = f"{proc_dir}/{pid}/maps"
-        # Check if path exists (used to check if empty but it wouldnt work because it would say all is empty?
+        # Check if path exists (used to check if empty but it wouldnt work because it would say all is empty?)
         if os.path.exists(maps_path): #and os.path.getsize(maps_path) > 0:
             # Get executable information
             exe_path, library = get_exe_info(pid)
