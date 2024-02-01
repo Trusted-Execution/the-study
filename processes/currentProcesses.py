@@ -7,13 +7,25 @@ def get_exe_info(pid):
         # Get the associated library
         maps_path = f"/proc/{pid}/maps"
         with open(maps_path, 'r') as maps_file:
-            # Read first line of the maps file
-            line = maps_file.readline()
-            # Make sure its not just empty space
-            if line.strip() != '':
-                # Get library info
-                library = line.split()[-1]
-                return exe_path, library
+            libraries = []
+            # Look at each line and fetch directories
+            for line in maps_file:
+                current_line = line.strip()
+                # If the current line is not empty
+                if current_line != '':
+                    # Get dependent library and add to list if not in it already
+                    library = current_line.split()[-1]
+                    # Only add to library list if not duplicate
+                    if library not in libraries:
+                        if library != '0' and not library.startswith('['):
+                            libraries.append(library)
+            # If the library list is not empty
+            if libraries:
+                # Delete first item since it is the executable name
+                libraries.pop(0)
+                return exe_path, libraries
+
+
     except Exception as e:
         # Ignoring printing the error because not checking map size...will have error of no exe dir
         # print(f"Error processing PID {pid}: {e}")
@@ -28,7 +40,12 @@ for pid in os.listdir(proc_dir):
         # Check if path exists (used to check if empty but it wouldnt work because it would say all is empty?)
         if os.path.exists(maps_path): #and os.path.getsize(maps_path) > 0:
             # Get executable information
-            exe_path, library = get_exe_info(pid)
-            # Print if both arent None
-            if exe_path and library:
-                print(f"PID: {pid}\nExecutable: {exe_path}\nLibrary: {library}\n")
+            exe_path, libraries = get_exe_info(pid)
+            # Print if both are not empty
+            if exe_path and libraries:
+                print(f"PID: {pid}\nExecutable: {exe_path}")
+                print("Libraries:")
+                for library in libraries:
+                    print(f"\t{library}")
+                print()
+
