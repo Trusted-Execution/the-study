@@ -26,7 +26,7 @@ for subdir, dirs, files in os.walk("/"):
                     tempSectionSizes = sectionSizes(file_path)
                     #print("-" * 50)
                     if (count100 == 100):
-                        print(".")
+                        print(".", end=" ", flush=True)
                         count100 = 0
                     for section_name, size in tempSectionSizes.items():
                         if section_name in sectionSizeData:
@@ -60,6 +60,9 @@ df.sort_values('Section', inplace=True)
 
 # Remove column with all the section sizes
 df = df.drop('Size', axis=1)
+
+# Reset the index column
+df.reset_index(drop=True, inplace=True)
 
 # Save to CSV / Excel
 df.to_csv('results.csv')
