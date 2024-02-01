@@ -13,7 +13,7 @@ def get_exe_info(pid):
                 current_line = line.strip()
                 # If the current line is not empty
                 if current_line != '':
-                    # Get dependent library and add to list if not in it already
+                    # Get dependent library
                     library = current_line.split()[-1]
                     # Only add to library list if not duplicate
                     if library not in libraries:
@@ -21,7 +21,7 @@ def get_exe_info(pid):
                             libraries.append(library)
             # If the library list is not empty
             if libraries:
-                # Delete first item since it is the executable name
+                # Delete first item since it is (usually) the executable name
                 libraries.pop(0)
                 return exe_path, libraries
 
