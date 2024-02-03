@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 
 def get_exe_info(pid):
     try:
@@ -21,8 +22,6 @@ def get_exe_info(pid):
                             libraries.append(library)
             # If the library list is not empty
             if libraries:
-                # Delete first item since it is (usually) the executable name
-                libraries.pop(0)
                 return exe_path, libraries
 
 
@@ -32,6 +31,7 @@ def get_exe_info(pid):
         return 0, 0
 
 proc_dir = "/proc"
+data = []   # Dictionary to hold data to create pandas dataframe
 
 # Iterate through directories in /proc
 for pid in os.listdir(proc_dir):
@@ -43,9 +43,15 @@ for pid in os.listdir(proc_dir):
             exe_path, libraries = get_exe_info(pid)
             # Print if both are not empty
             if exe_path and libraries:
-                print(f"PID: {pid}\nExecutable: {exe_path}")
-                print("Libraries:")
-                for library in libraries:
-                    print(f"\t{library}")
-                print()
+                data.append({
+                    "PID": pid,
+                    "Executable": exe_path,
+                    "Libraries": libraries
+                })
+
+# Create pandas dataframe
+df = pd.DataFrame(data)
+
+# Convert to CSV file
+df.to_csv("currentProcessData.csv", index=False)
 
