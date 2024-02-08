@@ -14,8 +14,8 @@ def parse_arguments():
     return parser.parse_args()
 
 
-countMz = 0
-countMzSize = 0
+countPE = 0
+countPeSize = 0
 count100 = 0
 sectionSizeData = {}
 start_time = time.time()
@@ -32,8 +32,8 @@ for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test d
                 print(".", end=" ", flush=True)
                 count100 = 0
             if isMzFile(filepath, debug_mode):
-                countMzSize += getSize(filepath)
-                countMz += 1
+                countPeSize += getSize(filepath)
+                countPE += 1
                 # Print size of each section
                 sectionSizes = mzSectionSizes(filepath, debug_mode)
                 if debug_mode:
@@ -45,7 +45,7 @@ for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test d
                     else:
                         sectionSizeData[name] = [size]
 
-print("\nMZ File Section Analysis:\n")
+print("\nPE File Section Analysis:\n")
 print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
 for name, sizes in sectionSizeData.items():
     count = len(sizes)
@@ -60,6 +60,6 @@ for name, sizes in sectionSizeData.items():
 
 end_time = time.time()
 elapsed_time = end_time - start_time
-print(f"\nTotal MZ files: {countMz}")
-print(f"Total MZ file size: {countMzSize} bytes\n")
+print(f"\nTotal PE files: {countPE}")
+print(f"Total PE file size: {countPeSize} bytes\n")
 print(f"Total runtime: {elapsed_time:.2f} seconds\n")
