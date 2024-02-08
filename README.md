@@ -25,3 +25,4 @@ A series of tools created to conduct research on executables and processes.
 - [pyelftools](https://github.com/eliben/pyelftools) for analyzing Linux 7FELF executables
 - [pefile](https://github.com/erocarrera/pefile) for analyzing Windows MZ executables
 - [psutil](https://psutil.readthedocs.io/en/latest/) for analyzing Linux processes
+- [pandas](https://pandas.pydata.org/) for storing data into CSV/Excel files
