@@ -6,6 +6,7 @@ from fileSize import getSize
 from mzSectionSize import mzSectionSizes
 import statistics
 import argparse
+import pandas as pd
 
 
 def parse_arguments():
@@ -45,8 +46,8 @@ for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test d
                     else:
                         sectionSizeData[name] = [size]
 
-print("\nPE File Section Analysis:\n")
-print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
+#print("\nPE File Section Analysis:\n")
+#print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format("Section Name", "Avg (bytes)", "Max", "Min", "STD", "Count"))
 for name, sizes in sectionSizeData.items():
     count = len(sizes)
     average = sum(sizes) / len(sizes)
@@ -56,7 +57,29 @@ for name, sizes in sectionSizeData.items():
         std = statistics.stdev(sizes)
     else:
         std = 0.0
-    print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format(name, round(average, 2), max_size, min_size, round(std, 2), count))
+    #print("{:<30} {:<20} {:<20} {:<10} {:<15} {:<8}".format(name, round(average, 2), max_size, min_size, round(std, 2), count))
+
+df = pd.DataFrame(list(sectionSizeData.items()), columns=['Section', 'Size'])
+
+df['Avg'] = df['Size'].apply(lambda sizes: sum(sizes) / len(sizes))
+df['Max'] = df['Size'].apply(max)
+df['Min'] = df['Size'].apply(min)
+df['Std'] = df['Size'].apply(lambda sizes: statistics.stdev(sizes) if len(sizes) >= 2 else 0.0)
+df['Count'] = df['Size'].apply(len)
+
+# Sort list alphabetically based on section name
+df.sort_values('Section', inplace=True)
+
+# Remove column with all the section sizes
+df = df.drop('Size', axis=1)
+
+# Reset the index column
+df.reset_index(drop=True, inplace=True)
+
+# Save to CSV / Excel
+df.to_csv('windows_results.csv')
+#df.to_excel('windows_results.xlsx') (Currently broken)
+
 
 end_time = time.time()
 elapsed_time = end_time - start_time

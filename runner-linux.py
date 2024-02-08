@@ -65,8 +65,8 @@ df = df.drop('Size', axis=1)
 df.reset_index(drop=True, inplace=True)
 
 # Save to CSV / Excel
-df.to_csv('results.csv')
-#df.to_excel('results.xlsx')( Currently broken)
+df.to_csv('linux_results.csv')
+#df.to_excel('linux_results.xlsx') (Currently broken)
 
 end_time = time.time()
 elapsed_time = end_time - start_time
