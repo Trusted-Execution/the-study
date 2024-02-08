@@ -28,7 +28,7 @@ for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test d
         filepath = os.path.join(subdir, file)
         if os.path.islink(filepath) == False:
             count100 += 1
-            if (count100 == 100):
+            if (count100 == 100) and debug_mode == 0:
                 print(".", end=" ", flush=True)
                 count100 = 0
             if isMzFile(filepath, debug_mode):
