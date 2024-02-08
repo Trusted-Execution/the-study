@@ -5,22 +5,34 @@ from isMZ import isMzFile
 from fileSize import getSize
 from mzSectionSize import mzSectionSizes
 import statistics
+import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='MZ File Analysis Script')
+    parser.add_argument('-debug', type=int, default=0, help='Enable debugging mode (1 for yes, 0 for no)')
+    return parser.parse_args()
+
 
 countMz = 0
 countMzSize = 0
 sectionSizeData = {}
 start_time = time.time()
 
+args = parse_arguments()
+debug_mode = args.debug
+
 for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to your own local test directory
     for file in files:
         filepath = os.path.join(subdir, file)
         if os.path.islink(filepath) == False:
-            if isMzFile(filepath):
+            if isMzFile(filepath, debug_mode):
                 countMzSize += getSize(filepath)
                 countMz += 1
                 # Print size of each section
-                sectionSizes = mzSectionSizes(filepath)
-                print("-" * 50)
+                sectionSizes = mzSectionSizes(filepath, debug_mode)
+                if debug_mode:
+                    print("-" * 50)
 
                 # Sum the sizes of each section
                 for name, size in sectionSizes.items():
