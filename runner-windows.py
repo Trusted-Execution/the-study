@@ -16,16 +16,21 @@ def parse_arguments():
 
 countMz = 0
 countMzSize = 0
+count100 = 0
 sectionSizeData = {}
 start_time = time.time()
 
 args = parse_arguments()
 debug_mode = args.debug
 
-for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to your own local test directory
+for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test directory
     for file in files:
         filepath = os.path.join(subdir, file)
         if os.path.islink(filepath) == False:
+            count100 += 1
+            if (count100 == 100):
+                print(".", end=" ", flush=True)
+                count100 = 0
             if isMzFile(filepath, debug_mode):
                 countMzSize += getSize(filepath)
                 countMz += 1
@@ -33,7 +38,6 @@ for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to y
                 sectionSizes = mzSectionSizes(filepath, debug_mode)
                 if debug_mode:
                     print("-" * 50)
-
                 # Sum the sizes of each section
                 for name, size in sectionSizes.items():
                     if name in sectionSizeData:
