@@ -10,7 +10,7 @@ def mzSectionSizes(file_path, debug_mode):
         print("{:<10}{:<10}{:<10}".format("Section", "Virtual", "Raw"))
         print("-" * 30)
     for section in pe.sections:
-        sectionName = section.Name.decode('utf-8').rstrip('\x00')
+        sectionName = section.Name.decode('utf-8','replace').rstrip('\x00')
         if debug_mode:
             print("{:<10}{:<10}{:<10}".format(sectionName, section.Misc_VirtualSize, section.SizeOfRawData))
         # Store section and size in dictionary (using raw data for now)
