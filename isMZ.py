@@ -18,7 +18,7 @@ def isMzFile(file_path, debug_mode = 0):
                 pe_signature = file.read(4)
                 if pe_signature == b'PE\x00\x00':
                     if debug_mode:
-                        print(f"{file_path} is a PE file")
+                        print(f"{truncate(file_path)} is a PE file")
                     return True
                 else:
                     if debug_mode:
