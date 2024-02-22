@@ -6,7 +6,7 @@ import statistics
 import pandas as pd
 from isElf import isElfFile
 from fileSize import getSize
-from elfSectionSize import sectionSizes
+from elfSectionSize import elfSectionSizes
 
 countElf = 0
 countElfSize = 0
@@ -23,7 +23,7 @@ for subdir, dirs, files in os.walk("/"):
                     countElfSize += getSize(file_path)
                     countElf += 1
                     count100 += 1
-                    tempSectionSizes = sectionSizes(file_path)
+                    tempSectionSizes = elfSectionSizes(file_path)
                     #print("-" * 50)
                     if (count100 == 100):
                         print(".", end=" ", flush=True)

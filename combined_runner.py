@@ -72,7 +72,7 @@ for subdir, dirs, files in os.walk(r"C:\Windows\System32"):                 # Ch
 elf_df = pd.DataFrame(list(elfSectionSizeData.items()), columns=['Section', 'Size'])
 pe_df = pd.DataFrame(list(peSectionSizeData.items()), columns=['Section', 'Size'])
 
-# Perform calculations
+# Perform analysis on data
 elf_df['Avg'] = elf_df['Size'].apply(lambda sizes: sum(sizes) / len(sizes))
 elf_df['Max'] = elf_df['Size'].apply(max)
 elf_df['Min'] = elf_df['Size'].apply(min)
@@ -85,17 +85,13 @@ pe_df['Min'] = pe_df['Size'].apply(min)
 pe_df['Std'] = pe_df['Size'].apply(lambda sizes: statistics.stdev(sizes) if len(sizes) >= 2 else 0.0)
 pe_df['Count'] = pe_df['Size'].apply(len)
 
-# Sort list alphabetically based on section name
+# Sort alphabetically based on section name
 elf_df.sort_values('Section', inplace=True)
 pe_df.sort_values('Section', inplace=True)
 
 # Remove column with all the section sizes
 elf_df = elf_df.drop('Size', axis=1)
 pe_df = pe_df.drop('Size', axis=1)
-
-# Reset the index column
-elf_df.reset_index(drop=True, inplace=True)
-pe_df.reset_index(drop=True, inplace=True)
 
 # Save to CSV
 elf_df.to_csv('results/elf_results.csv', index=False)
