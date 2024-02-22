@@ -32,21 +32,21 @@ start_time = time.time()
 args = parse_arguments()
 debug_mode = args.debug
 
-for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired directory on system
-    #if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):      # Comment out this line on Windows
+for subdir, dirs, files in os.walk(r"/"):                                # Change to desired directory on system
+    if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):      # Comment out this line on Windows
         for file in files:
             filepath = os.path.join(subdir, file)
             filename = os.path.basename(filepath)
             _, extension = os.path.splitext(filename)
-            # Generate information on individual files
-            file_data = {
-                'File Path': filepath,
-                'File Name': filename,
-                'Extension': extension,
-                'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
-                'Size': getSize(filepath)
-            }
             if os.path.islink(filepath) == False:
+                # Generate information on individual files
+                file_data = {
+                    'File Path': filepath,
+                    'File Name': filename,
+                    'Extension': extension,
+                    'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
+                    'File Size': getSize(filepath)
+                } 
                 if isElfFile(filepath):
                     countElfSize += getSize(filepath)
                     countElf += 1
@@ -62,9 +62,9 @@ for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired
                             elfSectionSizeData[section_name].append(size)
                         else:
                             elfSectionSizeData[section_name] = [size]
-                        file_data['Section Name'] = name
-                        file_data['Section Size'] = size
-                        elfFileInfo.append(file_data)
+                        #file_data['Section Name'] = section_name
+                        #file_data['Section Size'] = size
+                    elfFileInfo.append(file_data)           # Should have an entry for each section in a file
                 elif isMzFile(filepath, debug_mode):
                     count100Pe += 1
                     countPeSize += getSize(filepath)
@@ -83,9 +83,9 @@ for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired
                             peSectionSizeData[name].append(size)
                         else:
                             peSectionSizeData[name] = [size]
-                        file_data['Section Name'] = name
-                        file_data['Section Size'] = size
-                        peFileInfo.append(file_data)                # Should have an entry for each section in a file
+                        #file_data['Section Name'] = name
+                        #file_data['Section Size'] = size
+                    peFileInfo.append(file_data)                # Should have an entry for each section in a file
 
 # Create Pandas dataframes
 elf_df = pd.DataFrame(list(elfSectionSizeData.items()), columns=['Section', 'Size'])
@@ -128,6 +128,11 @@ writer.close()
 elf_file_df = pd.DataFrame(elfFileInfo)
 writer = pd.ExcelWriter('results/elf_files.xlsx', engine='xlsxwriter')
 elf_file_df.to_excel(writer, sheet_name='Sheet1', index=False)
+writer.close()
+
+pe_file_df = pd.DataFrame(peFileInfo)
+writer = pd.ExcelWriter('results/pe_files.xlsx', engine='xlsxwriter')
+pe_file_df.to_excel(writer, sheet_name='Sheet1', index=False)
 writer.close()
 
 end_time = time.time()
