@@ -26,6 +26,7 @@ count100Pe = 0
 elfSectionSizeData = {}
 peSectionSizeData = {}
 elfFileInfo = []
+peFileInfo = []
 start_time = time.time()
 
 args = parse_arguments()
@@ -37,6 +38,14 @@ for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired
             filepath = os.path.join(subdir, file)
             filename = os.path.basename(filepath)
             _, extension = os.path.splitext(filename)
+            # Generate information on individual files
+            file_data = {
+                'File Path': filepath,
+                'File Name': filename,
+                'Extension': extension,
+                'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
+                'Size': getSize(filepath)
+            }
             if os.path.islink(filepath) == False:
                 if isElfFile(filepath):
                     countElfSize += getSize(filepath)
@@ -53,16 +62,9 @@ for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired
                             elfSectionSizeData[section_name].append(size)
                         else:
                             elfSectionSizeData[section_name] = [size]
-
-                    # Generate information on individual files
-                    file_data = {
-                        'File Path': filepath,
-                        'File Name': filename,
-                        'Extension': extension,
-                        'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
-                        'Size': getSize(filepath)
-                    }
-                    elfFileInfo.append(file_data)
+                        file_data['Section Name'] = name
+                        file_data['Section Size'] = size
+                        elfFileInfo.append(file_data)
                 elif isMzFile(filepath, debug_mode):
                     count100Pe += 1
                     countPeSize += getSize(filepath)
@@ -81,6 +83,9 @@ for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired
                             peSectionSizeData[name].append(size)
                         else:
                             peSectionSizeData[name] = [size]
+                        file_data['Section Name'] = name
+                        file_data['Section Size'] = size
+                        peFileInfo.append(file_data)                # Should have an entry for each section in a file
 
 # Create Pandas dataframes
 elf_df = pd.DataFrame(list(elfSectionSizeData.items()), columns=['Section', 'Size'])
