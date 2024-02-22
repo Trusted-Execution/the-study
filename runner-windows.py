@@ -10,7 +10,7 @@ import pandas as pd
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='MZ File Analysis Script')
+    parser = argparse.ArgumentParser(description='PE File Analysis Script')
     parser.add_argument('-debug', type=int, default=0, help='Enable debugging mode (1 for yes, 0 for no)')
     return parser.parse_args()
 
