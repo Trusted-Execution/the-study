@@ -76,10 +76,12 @@ df = df.drop('Size', axis=1)
 # Reset the index column
 df.reset_index(drop=True, inplace=True)
 
-# Save to CSV / Excel
+# Save to CSV
 df.to_csv('windows_results.csv')
-#df.to_excel('windows_results.xlsx') (Currently broken)
 
+writer = pd.ExcelWriter('windows_results.xlsx', engine='xlsxwriter')
+df.to_excel(writer, sheet_name='Sheet1')
+writer.close()
 
 end_time = time.time()
 elapsed_time = end_time - start_time
