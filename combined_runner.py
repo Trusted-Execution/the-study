@@ -5,6 +5,7 @@ import time
 import statistics
 import pandas as pd
 import argparse
+from datetime import datetime
 from isElf import isElfFile
 from isMZ import isMzFile
 from fileSize import getSize
@@ -24,15 +25,18 @@ countPeSize = 0
 count100Pe = 0
 elfSectionSizeData = {}
 peSectionSizeData = {}
+elfFileInfo = []
 start_time = time.time()
 
 args = parse_arguments()
 debug_mode = args.debug
 
-for subdir, dirs, files in os.walk(r"C:\Windows\System32"):                 # Change to desired directory on system
+for subdir, dirs, files in os.walk(r"C:\\"):                 # Change to desired directory on system
     #if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):      # Comment out this line on Windows
         for file in files:
             filepath = os.path.join(subdir, file)
+            filename = os.path.basename(filepath)
+            _, extension = os.path.splitext(filename)
             if os.path.islink(filepath) == False:
                 if isElfFile(filepath):
                     countElfSize += getSize(filepath)
@@ -49,6 +53,16 @@ for subdir, dirs, files in os.walk(r"C:\Windows\System32"):                 # Ch
                             elfSectionSizeData[section_name].append(size)
                         else:
                             elfSectionSizeData[section_name] = [size]
+
+                    # Generate information on individual files
+                    file_data = {
+                        'File Path': filepath,
+                        'File Name': filename,
+                        'Extension': extension,
+                        'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
+                        'Size': getSize(filepath)
+                    }
+                    elfFileInfo.append(file_data)
                 elif isMzFile(filepath, debug_mode):
                     count100Pe += 1
                     countPeSize += getSize(filepath)
@@ -104,6 +118,11 @@ writer.close()
 
 writer = pd.ExcelWriter('results/pe_results.xlsx', engine='xlsxwriter')
 pe_df.to_excel(writer, sheet_name='Sheet1', index=False)
+writer.close()
+
+elf_file_df = pd.DataFrame(elfFileInfo)
+writer = pd.ExcelWriter('results/elf_files.xlsx', engine='xlsxwriter')
+elf_file_df.to_excel(writer, sheet_name='Sheet1', index=False)
 writer.close()
 
 end_time = time.time()
