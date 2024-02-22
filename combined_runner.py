@@ -32,60 +32,63 @@ start_time = time.time()
 args = parse_arguments()
 debug_mode = args.debug
 
-for subdir, dirs, files in os.walk(r"/"):                                # Change to desired directory on system
-    if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):      # Comment out this line on Windows
+for subdir, dirs, files in os.walk(r"C:\\"):                                # Change to desired directory on system
+    #if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):      # Comment out this line on Windows
         for file in files:
-            filepath = os.path.join(subdir, file)
-            filename = os.path.basename(filepath)
-            _, extension = os.path.splitext(filename)
-            if os.path.islink(filepath) == False:
-                # Generate information on individual files
-                file_data = {
-                    'File Path': filepath,
-                    'File Name': filename,
-                    'Extension': extension,
-                    'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
-                    'File Size': getSize(filepath)
-                } 
-                if isElfFile(filepath):
-                    countElfSize += getSize(filepath)
-                    countElf += 1
-                    count100Elf += 1
-                    tempSectionSizes = elfSectionSizes(filepath)
-                    #print("-" * 50)
-                    # Print . every 100 ELF files
-                    if (count100Elf == 100):
-                        print(".", end=" ", flush=True)
-                        count100Elf = 0
-                    for section_name, size in tempSectionSizes.items():
-                        if section_name in elfSectionSizeData:
-                            elfSectionSizeData[section_name].append(size)
-                        else:
-                            elfSectionSizeData[section_name] = [size]
-                        #file_data['Section Name'] = section_name
-                        #file_data['Section Size'] = size
-                    elfFileInfo.append(file_data)           # Should have an entry for each section in a file
-                elif isMzFile(filepath, debug_mode):
-                    count100Pe += 1
-                    countPeSize += getSize(filepath)
-                    countPE += 1
-                    # Print size of each section
-                    sectionSizes = mzSectionSizes(filepath, debug_mode)
-                    # Print * every 100 PE files
-                    if (count100Pe == 100) and debug_mode == 0:
-                        print("*", end=" ", flush=True)
-                        count100Pe = 0
-                    if debug_mode:
-                        print("-" * 50)
-                    # Sum the sizes of each section
-                    for name, size in sectionSizes.items():
-                        if name in peSectionSizeData:
-                            peSectionSizeData[name].append(size)
-                        else:
-                            peSectionSizeData[name] = [size]
-                        #file_data['Section Name'] = name
-                        #file_data['Section Size'] = size
-                    peFileInfo.append(file_data)                # Should have an entry for each section in a file
+            try:
+                filepath = os.path.join(subdir, file)
+                filename = os.path.basename(filepath)
+                _, extension = os.path.splitext(filename)
+                if os.path.islink(filepath) == False:
+                    # Generate information on individual files
+                    file_data = {
+                        'File Path': filepath,
+                        'File Name': filename,
+                        'Extension': extension,
+                        'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
+                        'File Size': getSize(filepath)
+                    }
+                    if isElfFile(filepath):
+                        countElfSize += getSize(filepath)
+                        countElf += 1
+                        count100Elf += 1
+                        tempSectionSizes = elfSectionSizes(filepath)
+                        #print("-" * 50)
+                        # Print . every 100 ELF files
+                        if (count100Elf == 100):
+                            print(".", end=" ", flush=True)
+                            count100Elf = 0
+                        for section_name, size in tempSectionSizes.items():
+                            if section_name in elfSectionSizeData:
+                                elfSectionSizeData[section_name].append(size)
+                            else:
+                                elfSectionSizeData[section_name] = [size]
+                            #file_data['Section Name'] = section_name
+                            #file_data['Section Size'] = size
+                        elfFileInfo.append(file_data)           # Should have an entry for each section in a file
+                    elif isMzFile(filepath, debug_mode):
+                        count100Pe += 1
+                        countPeSize += getSize(filepath)
+                        countPE += 1
+                        # Print size of each section
+                        sectionSizes = mzSectionSizes(filepath, debug_mode)
+                        # Print * every 100 PE files
+                        if (count100Pe == 100) and debug_mode == 0:
+                            print("*", end=" ", flush=True)
+                            count100Pe = 0
+                        if debug_mode:
+                            print("-" * 50)
+                        # Sum the sizes of each section
+                        for name, size in sectionSizes.items():
+                            if name in peSectionSizeData:
+                                peSectionSizeData[name].append(size)
+                            else:
+                                peSectionSizeData[name] = [size]
+                            #file_data['Section Name'] = name
+                            #file_data['Section Size'] = size
+                        peFileInfo.append(file_data)                # Should have an entry for each section in a file
+            except Exception as e:
+                print(f"Error accessing file '{filepath}': {e}")
 
 # Create Pandas dataframes
 elf_df = pd.DataFrame(list(elfSectionSizeData.items()), columns=['Section', 'Size'])
