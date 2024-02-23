@@ -1,6 +1,6 @@
 from elftools.elf.elffile import ELFFile
 
-def sectionSizes(file_path):
+def elfSectionSizes(file_path):
     sectionSizes = {}
     try:
         with open(file_path, 'rb') as file:

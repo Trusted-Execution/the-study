@@ -6,7 +6,7 @@ import statistics
 import pandas as pd
 from isElf import isElfFile
 from fileSize import getSize
-from elfSectionSize import sectionSizes
+from elfSectionSize import elfSectionSizes
 
 countElf = 0
 countElfSize = 0
@@ -23,7 +23,7 @@ for subdir, dirs, files in os.walk("/"):
                     countElfSize += getSize(file_path)
                     countElf += 1
                     count100 += 1
-                    tempSectionSizes = sectionSizes(file_path)
+                    tempSectionSizes = elfSectionSizes(file_path)
                     #print("-" * 50)
                     if (count100 == 100):
                         print(".", end=" ", flush=True)
@@ -64,9 +64,13 @@ df = df.drop('Size', axis=1)
 # Reset the index column
 df.reset_index(drop=True, inplace=True)
 
-# Save to CSV / Excel
+# Save to CSV
 df.to_csv('linux_results.csv')
-#df.to_excel('linux_results.xlsx') (Currently broken)
+
+# Create Excel file
+writer = pd.ExcelWriter('linux_results.xlsx', engine='xlsxwriter')
+df.to_excel(writer, sheet_name='Sheet1')
+writer.close()
 
 end_time = time.time()
 elapsed_time = end_time - start_time

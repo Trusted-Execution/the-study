@@ -12,8 +12,7 @@ A series of tools created to conduct research on executables and processes.
   - Average, minimum, maximum, number, and standard deviation of section sizes based on all executables found
   - Total executables found and their combined size
 ##### Linux only features
-- Uses pandas Python library to generate a CSV file with section size data
-  - Excel file generation currently broken
+- Uses pandas Python library to generate CSV and Excel files with section size data
 - Finds currently running processes and prints their dependent libraries
   - Prints hierarchy of library dependencies
   - Calculates average, minimum, maximum, and standard deviation of depth 
@@ -26,3 +25,4 @@ A series of tools created to conduct research on executables and processes.
 - [pefile](https://github.com/erocarrera/pefile) for analyzing Windows MZ executables
 - [psutil](https://psutil.readthedocs.io/en/latest/) for analyzing Linux processes
 - [pandas](https://pandas.pydata.org/) for storing data into CSV/Excel files
+- [XlsxWriter](https://xlsxwriter.readthedocs.io/index.html) for supplementing Excel file generation
