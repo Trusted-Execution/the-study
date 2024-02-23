@@ -24,7 +24,7 @@ start_time = time.time()
 args = parse_arguments()
 debug_mode = args.debug
 
-for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):   # Change to your own local test directory
+for subdir, dirs, files in os.walk(r"C:\\"):   # Change to your own local test directory
     for file in files:
         filepath = os.path.join(subdir, file)
         if os.path.islink(filepath) == False:
