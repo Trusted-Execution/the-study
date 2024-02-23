@@ -43,12 +43,12 @@ for subdir, dirs, files in os.walk(r"C:\Users\b135c\Downloads"):                
             if os.path.islink(filepath) == False:
                 # Generate information on individual files
                 file_data = {
+                        'Type': '',
                         'File Path': filepath,
                         'File Name': filename,
                         'Extension': extension,
-                        'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)),
+                        'Date Created': datetime.fromtimestamp(os.path.getctime(filepath)).strftime('%Y-%m-%d %H:%M:%S'),
                         'File Size': getSize(filepath),
-                        'Type': '',
                         'Symbol Name': '',
                         'Symbol Size': ''
                     }
