@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from elftools.elf.elffile import ELFFile
 
-def findSymbols(file_path):
+def findElfSymbols(file_path):
     symbols = {}
     try:
         with open(file_path, 'rb') as file:

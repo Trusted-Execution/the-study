@@ -1,6 +1,6 @@
 import pefile
 
-def findSymbols(file_path, debug_mode):
+def findMzSymbols(file_path, debug_mode):
     try:
         pe = pefile.PE(file_path)
 
