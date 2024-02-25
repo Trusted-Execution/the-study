@@ -2,23 +2,24 @@
 A series of tools created to conduct research on executables and processes.
 
 #### Current features:
-- Identifies all 7FELF executables (runner-linux.py) or MZ executables (runner-windows.py) on a system
-  - Excludes any symbolic links
-  - Runs by default on a smaller test directory for faster testing, but can easily be changed to traverse
-    entire system on Linux
-- Both tools are capable of finding:
-  - Overall size of each executable 
-  - All sections within each executable and their individual sizes
-  - Average, minimum, maximum, number, and standard deviation of section sizes based on all executables found
+- *combined_runner.py* can search through a Linux or Windows system to: 
+  - Searches for both ELF (Linux) and PE (Windows) executables
+    - Excludes any symbolic links
+  - Generates section analysis files, which contain average, minimum, maximum, number, and standard deviation of executable section sizes
+  - Generates a list of executables in the system, statistics about each file, and information about their different sections 
+  - Output stored in *results* folder
   - Total executables found and their combined size
-##### Linux only features
-- Uses pandas Python library to generate CSV and Excel files with section size data
-- Finds currently running processes and prints their dependent libraries
+  - USAGE: `python combined_runner.py --system=*YOURSYSTEMHERE*`
+    - system options: `windows` or `linux` (default: `linux`)
+- *processes/* contains scripts and results related to finding currently running processes on a system
   - Prints hierarchy of library dependencies
-  - Calculates average, minimum, maximum, and standard deviation of depth 
+  - Calculates average, minimum, maximum, and standard deviation of depth
+- *symbols/* contains scripts that finds exported symbols for every executable on a system
 
-#### Future features:
-- Find and count exported symbols for every executable on a system
+### Deprecated:
+- *runner-linux.py* and *runner-windows.py* were the original scripts to find ELF and PE files separately
+- *linux_results* and *windows_results* are also outdated, but are there for reference for the time being
+  - Likely to be removed later
 
 ### Python libraries utilized:
 - [pyelftools](https://github.com/eliben/pyelftools) for analyzing Linux 7FELF executables
