@@ -31,7 +31,7 @@ start_time = time.time()
 
 args = parse_arguments()
 
-# Specify filepath to run on based on OS
+# Specify filepath(s) to run on based on OS
 if args.system == 'linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
@@ -40,7 +40,7 @@ elif args.system == 'windows':
     subdirectories = ("")
 
 for subdir, dirs, files in os.walk(home_directory):
-    if subdir.startswith(subdirectories):       # Comment out this line on Windows
+    if subdir.startswith(subdirectories):
         for file in files:
             try:
                 filepath = os.path.join(subdir, file)
@@ -129,15 +129,18 @@ pe_df = pe_df.drop('Size', axis=1)
 
 # Generate results and store in correct folder based on system
 if args.system == 'linux':
-    elf_df.to_csv('results/linux/elf_section_analysis.csv', sep='\t', index=False)
-    pe_df.to_csv('results/linux/pe_section_analysis.csv', sep='\t', index=False)
+    elf_df.to_csv('results/linux/elf_section_analysis.txt', sep='\t', index=False)
+    pe_df.to_csv('results/linux/pe_section_analysis.txt', sep='\t', index=False)
     elf_file_df.to_csv('results/linux/elf_files_with_sections.txt', sep='\t', index=False)
     pe_file_df.to_csv('results/linux/pe_files_with_sections.txt', sep='\t', index=False)
 elif args.system == 'windows':
-    elf_df.to_csv('results/windows/elf_section_analysis.csv', sep='\t', index=False)
-    pe_df.to_csv('results/windows/pe_section_analysis.csv', sep='\t', index=False)
-    elf_file_df.to_csv('results/windows/elf_files.txt', sep='\t', index=False)
-    pe_file_df.to_csv('results/windows/pe_files.txt', sep='\t', index=False)
+    elf_df.to_csv('results/windows/elf_section_analysis.txt', sep='\t', index=False)
+    pe_df.to_csv('results/windows/pe_section_analysis.txt', sep='\t', index=False)
+    elf_file_df.to_csv('results/windows/elf_files_with_sections.txt', sep='\t', index=False)
+    try:
+        pe_file_df.to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
+    except UnicodeEncodeError:
+        pe_file_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
 
 end_time = time.time()
 elapsed_time = end_time - start_time

@@ -1,0 +1,4 @@
+This folder contains example results generated from combined_runner.py for both Linux and Windows.
+- elf_files_with_sections.txt and pe_files_with_sections.txt contain a list of all executables found on the system. They also list the sections within each executable and their respective sizes.
+  - Linux's elf_files_with_sections.txt was too large to store on GitHub, so the file can be accessed [here](https://www.dropbox.com/scl/fi/5e687cnmgvqvbz67dws60/elf_files_with_sections.txt?rlkey=ci2bsyh3j2wou0glc7xrnv4fw&dl=0).
+- elf_section_analysis.txt and pe_section_analysis.txt lists the sections found across all executables and relevant statistics.
