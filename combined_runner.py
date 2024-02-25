@@ -34,11 +34,13 @@ args = parse_arguments()
 # Specify filepath to run on based on OS
 if args.system == 'linux':
     home_directory = r"/"
+    subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
 elif args.system == 'windows':
     home_directory = r"C:\\"
+    subdirectories = ("")
 
 for subdir, dirs, files in os.walk(home_directory):
-    if subdir.startswith(("/home", "/usr", "/etc", "/opt", "/root")):       # Comment out this line on Windows
+    if subdir.startswith(subdirectories):       # Comment out this line on Windows
         for file in files:
             try:
                 filepath = os.path.join(subdir, file)
