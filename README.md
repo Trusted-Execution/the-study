@@ -20,8 +20,6 @@ A series of tools created to conduct research on executables and processes.
 
 ### Deprecated:
 - *runner-linux.py* and *runner-windows.py* were the original scripts to find ELF and PE files separately
-- *linux_results* and *windows_results* are also outdated, but are there for reference for the time being
-  - Likely to be removed later
 
 ### Python libraries utilized:
 - [pyelftools](https://github.com/eliben/pyelftools) for analyzing Linux 7FELF executables
