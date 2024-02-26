@@ -3,14 +3,14 @@ A series of tools created to conduct research on executables and processes.
 
 #### Current features:
 - *combined_runner.py* can search through a Linux or Windows system to: 
-  - Searches for both ELF (Linux) and PE (Windows) executables
+  - Search for both ELF (Linux) and PE (Windows) executables
     - Excludes any symbolic links
-  - Generates section analysis files
+  - Generate section analysis files
     - Contains average, minimum, maximum, number, and standard deviation of executable section sizes
-  - Generates a list of executables in the system
-    - Also contains statistics about each file and information about their different sections 
-  - Output stored in *results/* folder
-  - Total executables found and their combined size
+  - Generate a list of executables in the system and data about each file
+    - Also generates a list of each executable's different sections
+  - Calculate total executables (ELF/PE) found and their combined size
+  - Store output in *results/* folder
   - USAGE: `python combined_runner.py --system=*YOURSYSTEMHERE*`
     - system options: `windows` or `linux` (default: `linux`)
 - *processes/* contains scripts and results related to finding currently running processes on a system
