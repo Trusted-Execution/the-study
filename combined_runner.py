@@ -127,20 +127,38 @@ pe_df.sort_values('Section', inplace=True)
 elf_df = elf_df.drop('Size', axis=1)
 pe_df = pe_df.drop('Size', axis=1)
 
+elf_df['Type'] = 'ELF'
+elf_file_df['Type'] = 'ELF'
+pe_df['Type'] = 'PE'
+pe_file_df['Type'] = 'PE'
+
+# Create merged dataframes
+section_analysis_df = pd.concat([elf_df[['Type'] + elf_df.columns[:-1].tolist()], pe_df[['Type'] + pe_df.columns[:-1].tolist()]])
+executable_files_df = pd.concat([elf_file_df[['Type'] + elf_file_df.columns[:-1].tolist()], pe_file_df[['Type'] + pe_file_df.columns[:-1].tolist()]])
+
 # Generate results and store in correct folder based on system
 if args.system == 'linux':
+    # Executable section analysis
     elf_df.to_csv('results/linux/elf_section_analysis.txt', sep='\t', index=False)
-    pe_df.to_csv('results/linux/pe_section_analysis.txt', sep='\t', index=False)
+    pe_df.to_csv('results/linux/pe_section_analysis.txt', sep='\t', index=False) 
+    section_analysis_df.to_csv('results/linux/all_executable_section_analysis.txt', sep='\t', index=False)
+    # Lists of executables
     elf_file_df.to_csv('results/linux/elf_files_with_sections.txt', sep='\t', index=False)
     pe_file_df.to_csv('results/linux/pe_files_with_sections.txt', sep='\t', index=False)
+    executable_files_df.to_csv('results/linux/all_executables_with_sections.txt', sep='\t', index=False)
 elif args.system == 'windows':
+    # Executable section analaysis
     elf_df.to_csv('results/windows/elf_section_analysis.txt', sep='\t', index=False)
     pe_df.to_csv('results/windows/pe_section_analysis.txt', sep='\t', index=False)
+    section_analysis_df.to_csv('results/windows/all_executable_section_analysis.txt', sep='\t', index=False)
+    # Lists of executables
     elf_file_df.to_csv('results/windows/elf_files_with_sections.txt', sep='\t', index=False)
     try:
         pe_file_df.to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
+        executable_files_df.to_csv('results/windows/all_executables_with_sections.txt', sep='\t', index=False)
     except UnicodeEncodeError:
         pe_file_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
+        executable_files_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/all_executables_with_sections.txt', sep='\t', index=False, encoding='utf-8')
 
 end_time = time.time()
 elapsed_time = end_time - start_time

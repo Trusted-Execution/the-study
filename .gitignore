@@ -1,3 +1,4 @@
 __pycache__
 .idea/
+results/linux/all_executables_with_sections.txt
 results/linux/elf_files_with_sections.txt
