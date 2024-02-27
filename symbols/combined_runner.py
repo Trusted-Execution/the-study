@@ -72,7 +72,7 @@ for subdir, dirs, files in os.walk(home_directory):
                         if symbols is not None:
                             for symbol_name, symbol_data in symbols.items():
                                 file_data['Symbol Name'] = symbol_name
-                                file_data['Symbol Size'] = symbol_data['Size']
+                                file_data['Symbol Size (Bytes)'] = symbol_data['Size']
                                 data.append(file_data.copy())
                             elfFileInfo.append(file_data)           # Should have an entry for each section in a file
                     elif isMzFile(filepath, debug_mode):
@@ -86,7 +86,7 @@ for subdir, dirs, files in os.walk(home_directory):
                         if symbols is not None:
                             for symbol_name, symbol_data in symbols.items():
                                 file_data['Symbol Name'] = symbol_name
-                                file_data['Symbol Size'] = symbol_data['Size']
+                                file_data['Symbol Size (Bytes)'] = symbol_data['Size']
                                 data.append(file_data.copy())
                             peFileInfo.append(file_data)                # Should have an entry for each section in a file
             except Exception as e:
