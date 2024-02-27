@@ -39,7 +39,7 @@ if args.system == 'linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
 elif args.system == 'windows':
-    home_directory = r"C:\Users\b135c\OneDrive\Desktop\MY-MESS\masters\spring\EE699\test"
+    home_directory = r"C:\\"
     subdirectories = ("")
 for subdir, dirs, files in os.walk(home_directory):
     if subdir.startswith(subdirectories):

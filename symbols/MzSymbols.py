@@ -29,8 +29,6 @@ def findMzSymbols(file_path, debug_mode):
                         symbol_size = abs(section_end - entry.address)
 
                     export_symbols[symbol_name] = {
-                        'Ordinal': entry.ordinal,
-                        'Address': entry.address,
                         'Size': symbol_size
                     }
             return export_symbols
