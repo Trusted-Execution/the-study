@@ -1,6 +1,6 @@
 This folder contains scripts that finds exported symbols for every executable on a system
 
-#### Current features:
+### Current features:
 - *combined_runner.py* can search through a Linux or Windows system to: 
   - Search for both ELF (Linux) and PE (Windows) executables
     - Excludes any symbolic links
