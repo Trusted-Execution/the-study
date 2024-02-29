@@ -144,7 +144,7 @@ if current_system == 'Linux':
     elf_file_df.to_csv('results/linux/elf_files_with_sections.txt', sep='\t', index=False)
     pe_file_df.to_csv('results/linux/pe_files_with_sections.txt', sep='\t', index=False)
     executable_files_df.to_csv('results/linux/all_executables_with_sections.txt', sep='\t', index=False)
-    print("Results written to ./results/linux/")
+    print("\n\nResults written to ./results/linux/")
 elif current_system == 'Windows':
     # Executable section analaysis
     elf_df.to_csv('results/windows/elf_section_analysis.txt', sep='\t', index=False)
@@ -158,7 +158,7 @@ elif current_system == 'Windows':
     except UnicodeEncodeError:
         pe_file_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
         executable_files_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/all_executables_with_sections.txt', sep='\t', index=False, encoding='utf-8')
-    print("Results written to ./results/windows/")
+    print("\n\nResults written to ./results/windows/")
 
 end_time = time.time()
 elapsed_time = end_time - start_time
