@@ -2,7 +2,7 @@
 from datetime import datetime
 import os
 import time
-import statistics
+import platform
 import argparse
 import pandas as pd
 from isMZ import isMzFile
@@ -15,7 +15,6 @@ from elfSymbols import findElfSymbols
 def parse_arguments():
     parser = argparse.ArgumentParser(description='MZ File Analysis Script')
     parser.add_argument('--debug', type=int, default=0, help='Enable debugging mode (1 for yes, 0 for no)')
-    parser.add_argument('--system', required=True, choices=['linux', 'windows'], type=str, default='linux', help='Specify the operating system you are currently on')
     return parser.parse_args()
 
 countElf = 0
@@ -31,16 +30,23 @@ start_time = time.time()
 
 data = []
 
+
 args = parse_arguments()
 debug_mode = args.debug
 
+current_system = platform.system()
+
 # Specify filepath(s) to run on based on OS
-if args.system == 'linux':
+if current_system == 'Linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
-elif args.system == 'windows':
+elif current_system == 'Windows':
     home_directory = r"C:\\"
     subdirectories = ("")
+else:
+    print("You are running this script on an unsupported system! Please try again on a Linux or Windows system.")
+    exit()
+
 for subdir, dirs, files in os.walk(home_directory):
     if subdir.startswith(subdirectories):
         for file in files:
@@ -94,11 +100,11 @@ for subdir, dirs, files in os.walk(home_directory):
 # Create DataFrame from the collected data
 df = pd.DataFrame(data)
 
-if args.system == 'linux':
+if args.system == 'Linux':
     # Save DataFrame to CSV and txt
     df.to_csv('results/linux/combined_symbol_results.csv', index=False)
     df.to_csv('results/linux/combined_symbol_results.txt', sep='\t', index=False)
-elif args.system == 'windows':
+elif args.system == 'Windows':
     # Save DataFrame to CSV and txt
     df.to_csv('results/windows/combined_symbol_results.csv', index=False)
     df.to_csv('results/windows/combined_symbol_results.txt', sep='\t', index=False)
