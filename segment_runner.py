@@ -6,6 +6,7 @@ from isElf import isElfFile
 from isMZ import isMzFile
 import pefile
 from elftools.elf.elffile import ELFFile
+from elftools.elf.descriptions import describe_p_flags
 
 countElf = 0
 countElfSize = 0
@@ -23,8 +24,8 @@ current_system = platform.system()
 
 # Specify filepath(s) to run on based on OS
 if current_system == 'Linux':
-    home_directory = r"/"
-    subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
+    home_directory = r"/usr/bin"
+    subdirectories = ("")
 elif current_system == 'Windows':
     home_directory = r"C:\System64"
     subdirectories = ("")
@@ -46,7 +47,14 @@ for subdir, dirs, files in os.walk(home_directory):
                         with open(filepath, 'rb') as f:
                             elf = ELFFile(f)
                             for segment in elf.iter_segments():
-                                print(segment)
+                                print("Segment type:", segment['p_type'])
+                                print("Permissions:", describe_p_flags(segment['p_flags']))
+                                print("Virtual address:", hex(segment['p_vaddr']))
+                                print("Physical address:", hex(segment['p_paddr']))
+                                print("File offset:", hex(segment['p_offset']))
+                                print("Size in memory:", segment['p_memsz'])
+                                print("Size in file:", segment['p_filesz'])
+                                print()
                     elif isMzFile(filepath, 0):
                         countPE += 1
                         print("\nPE file:", filepath, "\n----------------------------")
