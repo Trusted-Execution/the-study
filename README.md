@@ -11,8 +11,7 @@ A series of tools created to conduct research on executables and processes.
     - Also generates a list of each executable's different sections
   - Calculate total executables (ELF/PE) found and their combined size
   - Store output in *results/* folder
-  - USAGE: `python combined_runner.py --system=*YOURSYSTEMHERE*`
-    - system options: `windows` or `linux` (default: `linux`)
+    - Automatically detects whether system is Windows or Linux and stores results in the appropriate subfolder 
 - *processes/* contains scripts and results related to finding currently running processes on a system
   - Prints hierarchy of library dependencies
   - Calculates average, minimum, maximum, and standard deviation of depth

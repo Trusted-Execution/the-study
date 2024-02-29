@@ -4,18 +4,13 @@ import struct
 import time
 import statistics
 import pandas as pd
-import argparse
+import platform
 from datetime import datetime
 from isElf import isElfFile
 from isMZ import isMzFile
 from fileSize import getSize
 from elfSectionSize import elfSectionSizes
 from mzSectionSize import mzSectionSizes
-
-def parse_arguments():
-    parser = argparse.ArgumentParser(description='Executable analysis tool for Windows and Linux')
-    parser.add_argument('--system', required=True, choices=['linux', 'windows'], type=str, default='linux', help='Specify the operating system you are currently on')
-    return parser.parse_args()
 
 countElf = 0
 countElfSize = 0
@@ -29,15 +24,18 @@ elfFileInfo = [];
 peFileInfo = []
 start_time = time.time()
 
-args = parse_arguments()
+current_system = platform.system()
 
 # Specify filepath(s) to run on based on OS
-if args.system == 'linux':
+if current_system == 'Linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
-elif args.system == 'windows':
+elif current_system == 'Windows':
     home_directory = r"C:\\"
     subdirectories = ("")
+else:
+    print("You are running this script on an unsupported system! Please try again on a Linux or Windows system.")
+    exit()
 
 for subdir, dirs, files in os.walk(home_directory):
     if subdir.startswith(subdirectories):
@@ -137,7 +135,7 @@ section_analysis_df = pd.concat([elf_df[['Type'] + elf_df.columns[:-1].tolist()]
 executable_files_df = pd.concat([elf_file_df[['Type'] + elf_file_df.columns[:-1].tolist()], pe_file_df[['Type'] + pe_file_df.columns[:-1].tolist()]])
 
 # Generate results and store in correct folder based on system
-if args.system == 'linux':
+if current_system == 'Linux':
     # Executable section analysis
     elf_df.to_csv('results/linux/elf_section_analysis.txt', sep='\t', index=False)
     pe_df.to_csv('results/linux/pe_section_analysis.txt', sep='\t', index=False) 
@@ -146,7 +144,8 @@ if args.system == 'linux':
     elf_file_df.to_csv('results/linux/elf_files_with_sections.txt', sep='\t', index=False)
     pe_file_df.to_csv('results/linux/pe_files_with_sections.txt', sep='\t', index=False)
     executable_files_df.to_csv('results/linux/all_executables_with_sections.txt', sep='\t', index=False)
-elif args.system == 'windows':
+    print("\n\nResults written to ./results/linux/")
+elif current_system == 'Windows':
     # Executable section analaysis
     elf_df.to_csv('results/windows/elf_section_analysis.txt', sep='\t', index=False)
     pe_df.to_csv('results/windows/pe_section_analysis.txt', sep='\t', index=False)
@@ -159,6 +158,7 @@ elif args.system == 'windows':
     except UnicodeEncodeError:
         pe_file_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/pe_files_with_sections.txt', sep='\t', index=False, encoding='utf-8')
         executable_files_df.applymap(lambda x: x.encode('unicode_escape').decode('utf-8') if isinstance(x, str) else x).to_csv('results/windows/all_executables_with_sections.txt', sep='\t', index=False, encoding='utf-8')
+    print("\n\nResults written to ./results/windows/")
 
 end_time = time.time()
 elapsed_time = end_time - start_time
