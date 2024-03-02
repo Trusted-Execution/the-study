@@ -9,6 +9,7 @@ from isMZ import isMzFile
 import pefile
 from elftools.elf.elffile import ELFFile
 from elftools.elf.descriptions import describe_p_flags
+from decodeCharacteristics import decodeChars
 
 countElf = 0
 countElfSize = 0
@@ -139,7 +140,7 @@ for key, data in peSectionSizeData.items():
     avg = data["sum"] / count
     variance = sum((x - avg) ** 2 for x in data["sizes"]) / count
     std_dev = math.sqrt(variance)
-    print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format(name, hex(characteristics), round(avg, 2), data['max'], data['min'], round(std_dev, 2), count))
+    print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format(name, decodeChars(characteristics), round(avg, 2), data['max'], data['min'], round(std_dev, 2), count))
 
 print("\nELF File Segment Analysis (Sizes in Memory):\n")
 print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format("Segment Name", "Characteristics", "Avg Size (bytes)", "Max", "Min", "STD", "Count"))
