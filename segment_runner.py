@@ -69,26 +69,26 @@ for subdir, dirs, files in os.walk(home_directory):
                                 if key not in elfSectionSizeData:
                                     elfSectionSizeData[key] = {
                                         "count": 0,
-                                        "sizesinMem": [],
-                                        "mininMem": float('inf'),
-                                        "maxinMem": float('-inf'),
-                                        "suminMem": 0,
-                                        "sizesinFile": [],
-                                        "mininFile": float('inf'),
-                                        "maxinFile": float('-inf'),
-                                        "suminFile": 0,
+                                        "sizesInMem": [],
+                                        "minInMem": float('inf'),
+                                        "maxInMem": float('-inf'),
+                                        "sumInMem": 0,
+                                        "sizesInFile": [],
+                                        "minInFile": float('inf'),
+                                        "maxInFile": float('-inf'),
+                                        "sumInFile": 0,
                                     }
                             
                                 elfSectionSizeData[key]["count"] += 1
-                                elfSectionSizeData[key]["sizesinMem"].append(sizeInMem)
-                                elfSectionSizeData[key]["mininMem"] = min(elfSectionSizeData[key]["mininMem"], sizeInMem)
-                                elfSectionSizeData[key]["maxinMem"] = max(elfSectionSizeData[key]["maxinMem"], sizeInMem)
-                                elfSectionSizeData[key]["suminMem"] += sizeInMem
+                                elfSectionSizeData[key]["sizesInMem"].append(sizeInMem)
+                                elfSectionSizeData[key]["minInMem"] = min(elfSectionSizeData[key]["minInMem"], sizeInMem)
+                                elfSectionSizeData[key]["maxInMem"] = max(elfSectionSizeData[key]["maxInMem"], sizeInMem)
+                                elfSectionSizeData[key]["sumInMem"] += sizeInMem
 
-                                elfSectionSizeData[key]["sizesinFile"].append(sizeInFile)
-                                elfSectionSizeData[key]["mininFile"] = min(elfSectionSizeData[key]["mininFile"], sizeInFile)
-                                elfSectionSizeData[key]["maxinFile"] = max(elfSectionSizeData[key]["maxinFile"], sizeInFile)
-                                elfSectionSizeData[key]["suminFile"] += sizeInFile
+                                elfSectionSizeData[key]["sizesInFile"].append(sizeInFile)
+                                elfSectionSizeData[key]["minInFile"] = min(elfSectionSizeData[key]["minInFile"], sizeInFile)
+                                elfSectionSizeData[key]["maxInFile"] = max(elfSectionSizeData[key]["maxInFile"], sizeInFile)
+                                elfSectionSizeData[key]["sumInFile"] += sizeInFile
 
                     elif isMzFile(filepath, 0):
                         countPE += 1
@@ -136,7 +136,7 @@ for key, data in elfSectionSizeData.items():
     name = key[0]
     flags = key[1]
     count = data["count"]
-    avg = data["suminMem"] / count
+    avg = data["sumInMem"] / count
     variance = sum((x - avg) ** 2 for x in data["sizesInMem"]) / count
     std_dev = math.sqrt(variance)
     print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<8}".format(name, flags, round(avg, 2), data['maxInMem'], data['minInMem'], round(std_dev, 2), count))
@@ -147,7 +147,7 @@ for key, data in elfSectionSizeData.items():
     name = key[0]
     flags = key[1]
     count = data["count"]
-    avg = data["suminFile"] / count
+    avg = data["sumInFile"] / count
     variance = sum((x - avg) ** 2 for x in data["sizesInFile"]) / count
     std_dev = math.sqrt(variance)
     print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<8}".format(name, flags, round(avg, 2), data['maxInFile'], data['minInFile'], round(std_dev, 2), count))
