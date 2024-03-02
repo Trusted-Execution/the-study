@@ -7,9 +7,8 @@ This folder contains scripts that finds exported symbols for every executable on
   - Generate files that list each symbol and size along with the file information
     - Generates both .csv and .txt files
   - Store output in *results/* folder
-  - USAGE: `python combined_runner.py --system=*YOURSYSTEMHERE*`
-    - system options: `windows` or `linux` (default: `linux`)
-    - windows also has a --debug option: 0 for on or 1 for off (default: 0)
+  - USAGE: `python combined_runner.py`
+    - windows also has a `--debug` option: 0 for on or 1 for off (default: 0)
 
 ### Deprecated:
 - *runner-linux.py* and *runner-windows.py* were the original scripts to find ELF and PE files separately
