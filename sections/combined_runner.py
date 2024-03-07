@@ -11,9 +11,9 @@ import sys
 sys.path.append('../utils')
 
 from datetime import datetime
-from utils.isElf import isElfFile
-from utils.isMZ import isMzFile
-from utils.fileSize import getSize
+from isElf import isElfFile
+from isMZ import isMzFile
+from fileSize import getSize
 from elfSectionSize import elfSectionSizes
 from mzSectionSize import mzSectionSizes
 

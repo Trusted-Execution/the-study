@@ -5,12 +5,12 @@ import platform
 import math
 import argparse
 import sys
- 
+import pandas as pd
 # setting path
 sys.path.append('../utils')
 
-from utils.isElf import isElfFile
-from utils.isMZ import isMzFile
+from isElf import isElfFile
+from isMZ import isMzFile
 import pefile
 from elftools.elf.elffile import ELFFile
 from elftools.elf.descriptions import describe_p_flags
@@ -36,12 +36,25 @@ def parse_arguments():
 args = parse_arguments()
 debug_mode = args.debug
 
+current_system = platform.system()
+
 # Specify filepath(s) to run on based on OS
 if current_system == 'Linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
 elif current_system == 'Windows':
     home_directory = r"C:\\"
+    subdirectories = ("")
+else:
+    print("You are running this script on an unsupported system! Please try again on a Linux or Windows system.")
+    exit()
+
+# Specify filepath(s) to run on based on OS
+if current_system == 'Linux':
+    home_directory = r"/"
+    subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
+elif current_system == 'Windows':
+    home_directory = r"C:\Users\b135c\OneDrive\Desktop\MY-MESS\masters\spring\EE699\test"
     subdirectories = ("")
 else:
     print("You are running this script on an unsupported system! Please try again on a Linux or Windows system.")
@@ -136,6 +149,7 @@ for subdir, dirs, files in os.walk(home_directory):
             except Exception as e:
                 print(f"Error accessing file '{filepath}': {e}")
 
+pe_data = []
 print("\nPE File Segment Analysis:\n")
 print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format("Segment Name", "Characteristics", "Avg Size of Raw Data (bytes)", "Max", "Min", "STD", "Count"))
 for key, data in peSectionSizeData.items():
@@ -145,8 +159,19 @@ for key, data in peSectionSizeData.items():
     avg = data["sum"] / count
     variance = sum((x - avg) ** 2 for x in data["sizes"]) / count
     std_dev = math.sqrt(variance)
+    file_data = {
+            "Segment Name": name,
+            "Characteristics": decodeChars(characteristics),
+            "Avg Size of Raw Data (bytes)": avg,
+            "Max": data['max'],
+            "Min": data['min'],
+            "STD": std_dev,
+            "Count": count
+    }
+    pe_data.append(file_data)
     print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format(name, decodeChars(characteristics), round(avg, 2), data['max'], data['min'], round(std_dev, 2), count))
 
+elf_inmem_data = []
 print("\nELF File Segment Analysis (Sizes in Memory):\n")
 print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format("Segment Name", "Characteristics", "Avg Size (bytes)", "Max", "Min", "STD", "Count"))
 for key, data in elfSectionSizeData.items():
@@ -156,8 +181,19 @@ for key, data in elfSectionSizeData.items():
     avg = data["sumInMem"] / count
     variance = sum((x - avg) ** 2 for x in data["sizesInMem"]) / count
     std_dev = math.sqrt(variance)
+    file_data = {
+            "Segment Name": name,
+            "Characteristics": flags,
+            "Avg Size (bytes)": avg,
+            "Max": data['maxInMem'],
+            "Min": data['minInMem'],
+            "STD": std_dev,
+            "Count": count
+    }
+    elf_inmem_data.append(file_data)
     print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format(name, flags, round(avg, 2), data['maxInMem'], data['minInMem'], round(std_dev, 2), count))
 
+elf_infile_data = []
 print("\nELF File Segment Analysis (Sizes in File):\n")
 print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format("Segment Name", "Characteristics", "Avg Size (bytes)", "Max", "Min", "STD", "Count"))
 for key, data in elfSectionSizeData.items():
@@ -167,8 +203,34 @@ for key, data in elfSectionSizeData.items():
     avg = data["sumInFile"] / count
     variance = sum((x - avg) ** 2 for x in data["sizesInFile"]) / count
     std_dev = math.sqrt(variance)
+    file_data = {
+            "Segment Name": name,
+            "Characteristics": flags,
+            "Avg Size (bytes)": avg,
+            "Max": data['maxInFile'],
+            "Min": data['minInFile'],
+            "STD": std_dev,
+            "Count": count
+    }
+    elf_infile_data.append(file_data)
     print("{:<20} {:<20} {:<30} {:<10} {:<15} {:<20} {:<8}".format(name, flags, round(avg, 2), data['maxInFile'], data['minInFile'], round(std_dev, 2), count))
 
+# Create DataFrames from the collected data
+pe_df = pd.DataFrame(pe_data)
+elf_inmem_df = pd.DataFrame(elf_inmem_data)
+elf_infile_df = pd.DataFrame(elf_infile_data)
+
+if current_system == 'Linux':
+    excel_path = 'results/linux/segment_summary.xlsx'
+
+elif current_system == 'Windows':
+    excel_path = 'results/windows/segment_summary.xlsx'
+
+with pd.ExcelWriter(excel_path, engine='xlsxwriter') as writer:
+    # Write each DataFrame to a different worksheet.
+    pe_df.to_excel(writer, sheet_name='PE_Segment_Summary', index=False)
+    elf_inmem_df.to_excel(writer, sheet_name='ELF_InMem_Segment_Summary', index=False)
+    elf_infile_df.to_excel(writer, sheet_name='ELF_InFile_Segment_Summary', index=False)
 
 end_time = time.time()
 elapsed_time = end_time - start_time

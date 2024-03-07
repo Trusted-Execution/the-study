@@ -10,11 +10,11 @@ import sys
 # setting path
 sys.path.append('../utils')
 
-from utils.isMZ import isMzFile
-from utils.fileSize import getSize
+from isMZ import isMzFile
+from fileSize import getSize
 from MzSymbols import findMzSymbols
-from utils.isElf import isElfFile
-from utils.fileSize import getSize
+from isElf import isElfFile
+from fileSize import getSize
 from elfSymbols import findElfSymbols
 
 def parse_arguments():
@@ -105,11 +105,11 @@ for subdir, dirs, files in os.walk(home_directory):
 # Create DataFrame from the collected data
 df = pd.DataFrame(data)
 
-if args.system == 'Linux':
+if current_system == 'Linux':
     # Save DataFrame to CSV and txt
     df.to_csv('results/linux/combined_symbol_results.csv', index=False)
     df.to_csv('results/linux/combined_symbol_results.txt', sep='\t', index=False)
-elif args.system == 'Windows':
+elif current_system == 'Windows':
     # Save DataFrame to CSV and txt
     df.to_csv('results/windows/combined_symbol_results.csv', index=False)
     df.to_csv('results/windows/combined_symbol_results.txt', sep='\t', index=False)
