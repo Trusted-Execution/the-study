@@ -4,8 +4,13 @@ import time
 import platform
 import math
 import argparse
-from isElf import isElfFile
-from isMZ import isMzFile
+import sys
+ 
+# setting path
+sys.path.append('../utils')
+
+from utils.isElf import isElfFile
+from utils.isMZ import isMzFile
 import pefile
 from elftools.elf.elffile import ELFFile
 from elftools.elf.descriptions import describe_p_flags

@@ -5,11 +5,16 @@ import time
 import platform
 import argparse
 import pandas as pd
-from isMZ import isMzFile
-from fileSize import getSize
+import sys
+ 
+# setting path
+sys.path.append('../utils')
+
+from utils.isMZ import isMzFile
+from utils.fileSize import getSize
 from MzSymbols import findMzSymbols
-from isElf import isElfFile
-from fileSize import getSize
+from utils.isElf import isElfFile
+from utils.fileSize import getSize
 from elfSymbols import findElfSymbols
 
 def parse_arguments():
