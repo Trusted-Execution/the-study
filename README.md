@@ -2,27 +2,10 @@
 A series of tools created to conduct research on executables and processes.
 
 #### Current features:
-- *combined_runner.py* can search through a Linux or Windows system to: 
-  - Search for both ELF (Linux) and PE (Windows) executables
-    - Excludes any symbolic links
-  - Generate section analysis files
-    - Contains average, minimum, maximum, number, and standard deviation of executable section sizes
-  - Generate a list of executables in the system and data about each file
-    - Also generates a list of each executable's different sections
-  - Calculate total executables (ELF/PE) found and their combined size
-  - Store output in *results/* folder
-    - Automatically detects whether system is Windows or Linux and stores results in the appropriate subfolder 
+- *sections/* contains scripts and results related to analyzing sections in executables
+- *segments/* contains scripts and results related to analyzing segments in executables
 - *processes/* contains scripts and results related to finding currently running processes on a system
   - Prints hierarchy of library dependencies
   - Calculates average, minimum, maximum, and standard deviation of depth
 - *symbols/* contains scripts that finds exported symbols for every executable on a system
-
-### Deprecated:
-- *runner-linux.py* and *runner-windows.py* were the original scripts to find ELF and PE files separately
-
-### Python libraries utilized:
-- [pyelftools](https://github.com/eliben/pyelftools) for analyzing Linux 7FELF executables
-- [pefile](https://github.com/erocarrera/pefile) for analyzing Windows MZ executables
-- [psutil](https://psutil.readthedocs.io/en/latest/) for analyzing Linux processes
-- [pandas](https://pandas.pydata.org/) for storing data into CSV/Excel files
-- [XlsxWriter](https://xlsxwriter.readthedocs.io/index.html) for supplementing Excel file generation
+- *utils/* contains scripts for common methods used in *sections/*, *segments/*, and *symbols/*
