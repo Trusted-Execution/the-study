@@ -1,0 +1,11 @@
+#### Current features:
+- *combined_runner.py* can search through a Linux or Windows system to: 
+  - Search for both ELF (Linux) and PE (Windows) executables
+    - Excludes any symbolic links
+  - Generate section analysis files
+    - Contains average, minimum, maximum, number, and standard deviation of executable section sizes
+  - Generate a list of executables in the system and data about each file
+    - Also generates a list of each executable's different sections
+  - Calculate total executables (ELF/PE) found and their combined size
+  - Store output in *results/* folder
+    - Automatically detects whether system is Windows or Linux and stores results in the appropriate subfolder 
