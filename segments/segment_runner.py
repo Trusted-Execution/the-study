@@ -43,17 +43,6 @@ if current_system == 'Linux':
     home_directory = r"/"
     subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
 elif current_system == 'Windows':
-    home_directory = r"C:\\"
-    subdirectories = ("")
-else:
-    print("You are running this script on an unsupported system! Please try again on a Linux or Windows system.")
-    exit()
-
-# Specify filepath(s) to run on based on OS
-if current_system == 'Linux':
-    home_directory = r"/"
-    subdirectories = ("/home", "/usr", "/etc", "/opt", "/root")
-elif current_system == 'Windows':
     home_directory = r"C:\Users\b135c\OneDrive\Desktop\MY-MESS\masters\spring\EE699\test"
     subdirectories = ("")
 else:
